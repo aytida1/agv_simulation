@@ -2,7 +2,7 @@ import os # python module for path handling
 
 from ament_index_python.packages import get_package_share_directory  # as name suggests to get the "share" directory to import config files etc.
 from launch import LaunchDescription  # main class in which sequence of actions is defined
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler, ExecuteProcess  # ExecuteProcess to run cli commands
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, ExecuteProcess, TimerAction  # ExecuteProcess to run cli commands
 from launch.actions import SetEnvironmentVariable # used for gazebo models environments
 from launch.substitutions import LaunchConfiguration, Command
 from launch.actions import IncludeLaunchDescription  # to include other launch files
@@ -20,25 +20,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     my_package_path = get_package_share_directory("agv_simulation")
-    world_file_path = os.path.join(my_package_path, "worlds", "test_world_new.sdf")
     xacro_file = os.path.join(my_package_path, 'urdf', 'dose_car.urdf.xacro')
-
-    # setting environment variable for gazebo
-    gz_resource_path = SetEnvironmentVariable(
-        name='GZ_SIM_RESOURCE_PATH',
-        value=[
-            os.path.join(my_package_path, "models"),
-            os.environ.get('GZ_SIM_RESOURCE_PATH', '')
-        ]
-    )
-
-    gazebo_launch = ExecuteProcess(
-        cmd=['gz', 'sim', world_file_path],
-        output='screen'
-    )
-
-    ld.add_action(gz_resource_path)
-    ld.add_action(gazebo_launch)
 
     # array for FIVE agv's config : namespace, parking location
     agv_configs = [
@@ -90,7 +72,7 @@ def generate_launch_description():
 
     # ros gz bridge config file
     ros_gz_config_file = os.path.join(
-        get_package_share_directory('agv_simulation'),
+        my_package_path,
         'config',
         'ros_gz_bridge.yaml'
     )
@@ -112,28 +94,36 @@ def generate_launch_description():
             }
         )
 
-        # Robot description for this AGV with unique scene name
-        robot_description_content = ParameterValue(
-            Command([
-                'xacro ', xacro_file, 
-                ' robot_name:=', agv_config["name"],
-                ' namespace:=', agv_config["namespace"]
-            ]), 
-            value_type=str
+        mapper_node = Node(
+            package='agv_simulation',
+            executable='mapper.cpp',
+            name='odom_mapper',
+            output='screen'
         )
 
-        rsp = Node(
-            package='robot_state_publisher',
-            executable='robot_state_publisher',
-            name='robot_state_publisher',
-            namespace=agv_config['namespace'],
-            output='output',
-            parameters=[{
-                'robot_description':robot_description_content,
-                'use_sim_time':'true'
-            }],
-            respawn=True,
-            respawn_delay=2.0
+        scan_merger_node = Node(
+            package='agv_simulation',
+            executable='scan_merger_v2',
+            name='scan_merger_v2',
+            output='screen'
         )
+
+        delayed_mapper_node = TimerAction(
+            period=2.0,
+            actions=[mapper_node]
+        )
+
+        delayed_scan_merger_node = TimerAction(
+            period=4.0,
+            actions=[scan_merger_node]
+        )
+
+        return [
+            bridge,
+            delayed_mapper_node,
+            delayed_scan_merger_node
+        ]
+    ld.add_action(create_agv_nodes(agv_configs[0]))
+
 
     return ld
