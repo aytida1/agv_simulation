@@ -41,6 +41,8 @@ public:
             base_frame_ = robot_name + "/base_link";
             lidar_right_frame_ =  robot_name + "/gpu_lidar_right";
             lidar_left_frame_ =   robot_name + "/gpu_lidar_left";
+            // scan1_topic_ = node_namespace + "/" + "scan1";  // Will be automatically namespaced
+            // scan2_topic_ = node_namespace + "/" + "scan2";  // Will be automatically namespaced
             scan1_topic_ = "scan1";  // Will be automatically namespaced
             scan2_topic_ = "scan2";  // Will be automatically namespaced
         }
@@ -122,7 +124,7 @@ void ScanMergerV2::scan1_callback(const sensor_msgs::msg::LaserScan::SharedPtr m
     last_scan1_time_ = msg->header.stamp;
     
     // Process immediately when scan arrives
-    process_and_publish_scans();
+    // process_and_publish_scans(); // commenting out because it is duplicating
 }
 
 

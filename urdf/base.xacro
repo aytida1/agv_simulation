@@ -9,7 +9,7 @@
     
     
 
-    <!-- <link name="${robot_prefix}base_footprint" /> -->
+    <link name="${robot_prefix}base_footprint" />
     <link name="${robot_prefix}base_link">
         <visual>
             <geometry>
@@ -27,11 +27,11 @@
         </collision>
     </link>
 
-    <!-- <joint name="${robot_prefix}base_footprint_joint" type="fixed">
-        <parent link="${robot_prefix}base_footprint" />
+    <joint name="${robot_prefix}base_footprint_joint" type="fixed">
         <child link="${robot_prefix}base_link" />
+        <parent link="${robot_prefix}base_footprint" />
         <origin xyz="0 0 0.071" rpy="0 0 0"/>
-    </joint> -->
+    </joint>
 
     
 
@@ -445,8 +445,8 @@
         </plugin>
     </gazebo>
 
-    <!-- Individual sensors plugin with unique scene name per robot -->
-    <!-- <gazebo>
+    <!-- Individual sensors plugin with unique scene name per robot
+    <gazebo>
         <plugin filename="gz-sim-sensors-system"
                 name="gz::sim::systems::Sensors">
             <render_engine>ogre2</render_engine>

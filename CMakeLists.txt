@@ -23,8 +23,14 @@ ament_target_dependencies(frame_remapper rclcpp nav_msgs geometry_msgs tf2_ros t
 add_executable(scan_merger_v2 src/scan_merger_v2.cpp)
 ament_target_dependencies(scan_merger_v2 rclcpp sensor_msgs geometry_msgs tf2_ros tf2)
 
+install(TARGETS
+  frame_remapper
+  scan_merger_v2
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(DIRECTORY
-        launch worlds urdf models config
+        launch worlds urdf models config src map
         DESTINATION share/${PROJECT_NAME}/
 )
 

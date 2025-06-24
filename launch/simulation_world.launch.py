@@ -68,7 +68,8 @@ def generate_launch_description():
             output='screen',
             parameters=[{
                 'robot_description':robot_description_content,
-                'use_sim_time':True
+                'use_sim_time':True,
+                'publish_frequency': 50.0,  # Ensure regular publishing
             }],
             respawn=True,
             respawn_delay=2.0
