@@ -261,6 +261,7 @@ def generate_launch_description():
             executable='scan_merger_v2',
             name='scan_merger_v2',
             namespace=agv_config['namespace'],
+            parameters=[{'robot_name': agv_config['name']}],
             output='screen'
         )
 

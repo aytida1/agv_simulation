@@ -11,6 +11,7 @@
     
     <!-- Keep robot_prefix empty - let robot_state_publisher handle frame prefixing -->
     <xacro:property name="robot_prefix" value="${namespace}/"/>
+    <xacro:property name="robot_name_prefix" value="${robot_name}/"/>
     
     <xacro:include filename="properties.xacro" />
     <xacro:include filename="base.xacro" />

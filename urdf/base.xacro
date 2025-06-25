@@ -28,9 +28,9 @@
     </link>
 
     <joint name="${robot_prefix}base_footprint_joint" type="fixed">
-        <child link="${robot_prefix}base_link" />
-        <parent link="${robot_prefix}base_footprint" />
-        <origin xyz="0 0 0.071" rpy="0 0 0"/>
+        <parent link="${robot_prefix}base_link" />
+        <child link="${robot_prefix}base_footprint" />
+        <origin xyz="0 0 -0.071" rpy="0 0 0"/>
     </joint>
 
     
@@ -71,7 +71,7 @@
         <axis xyz="0 1 0" />
     </joint>
 
-    <link name="${robot_prefix}gpu_lidar_right">
+    <link name="${robot_name_prefix}${robot_prefix}base_link/gpu_lidar_right">
         <visual>
             <geometry>
                 <cylinder radius="0.03" length="0.015" />
@@ -92,11 +92,11 @@
 
     <joint name="${robot_prefix}lidar_right_base_joint" type="fixed">
         <parent link="${robot_prefix}base_link" />
-        <child link="${robot_prefix}gpu_lidar_right" />
+        <child link="${robot_name_prefix}${robot_prefix}base_link/gpu_lidar_right" />
         <origin xyz="0.115 -0.16789 0.12" rpy="0 0 0"/>
     </joint>
 
-    <link name="${robot_prefix}gpu_lidar_left">
+    <link name="${robot_name_prefix}${robot_prefix}base_link/gpu_lidar_left">
         <visual>
             <geometry>
                 <cylinder radius="0.03" length="0.015" />
@@ -115,7 +115,7 @@
 
     <joint name="${robot_prefix}lidar_left_base_joint" type="fixed">
         <parent link="${robot_prefix}base_link" />
-        <child link="${robot_prefix}gpu_lidar_left" />
+        <child link="${robot_name_prefix}${robot_prefix}base_link/gpu_lidar_left" />
         <origin xyz="-0.115 0.16789 0.12" rpy="0 0 3.14"/>
     </joint>
 
@@ -366,10 +366,10 @@
         </sensor>
     </gazebo>
 
-    <gazebo reference="${robot_prefix}gpu_lidar_right">
+    <gazebo reference="${robot_name_prefix}${robot_prefix}base_link/gpu_lidar_right">
         <material>Gazebo/Black</material>
         <sensor name='gpu_lidar_right' type='gpu_lidar'>
-            <pose relative_to='${robot_prefix}gpu_lidar_right'>0 0 0 0 0 0</pose>
+            <pose relative_to='${robot_name_prefix}${robot_prefix}base_link/gpu_lidar_right'>0 0 0 0 0 0</pose>
             <topic>${namespace}/lidar1</topic>
             <update_rate>10</update_rate>
             <ray>
@@ -398,10 +398,10 @@
         </sensor>
     </gazebo>
 
-    <gazebo reference="${robot_prefix}gpu_lidar_left">
+    <gazebo reference="${robot_name_prefix}${robot_prefix}base_link/gpu_lidar_left">
         <material>Gazebo/Black</material>
         <sensor name='gpu_lidar_left' type='gpu_lidar'>
-            <pose relative_to='${robot_prefix}gpu_lidar_left'>0 0 0 0 0 0</pose>
+            <pose relative_to='${robot_name_prefix}${robot_prefix}base_link/gpu_lidar_left'>0 0 0 0 0 0</pose>
             <topic>${namespace}/lidar2</topic>
             <update_rate>10</update_rate>
             <ray>
